@@ -34,13 +34,12 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
+          appSourcePath: ${{ github.workspace }}/api
+          dockerfilePath: Dockerfile
+          acrName: acr31oi23218
           registryUrl: acr31oi23218.azurecr.io
           containerAppName: api
           resourceGroup: rg-test
           imageToBuild: acr31oi23218.azurecr.io/api:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
 
 
