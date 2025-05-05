@@ -2,16 +2,22 @@
 
 ## Push image
 
+Login to ACR
+
+```
+az acr login --name acr31oi23218
+```
+
 Build the image
 
 ```
-docker buildx build --platform linux/amd64 -t acr31oi23218.azurecr.io/api:latest .
+docker buildx build --platform linux/amd64 -t acr31oi23218.azurecr.io/job:latest .
 ```
 
 Push the image to acr
 
 ```
-docker push acr31oi23218.azurecr.io/api:latest
+docker push acr31oi23218.azurecr.io/job:latest
 ```
 
 Update revision

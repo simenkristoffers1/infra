@@ -1,0 +1,27 @@
+{
+    "files.eol": "\n",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.rulers": [
+        120
+    ],
+    "editor.tabSize": 4,
+    "editor.codeLens": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always",
+        "source.sortImports": "always",
+        "source.organizeImports": "always"
+    },
+    "python.defaultInterpreterPath": "api/.venv/bin/python",
+    "python.analysis.extraPaths": [
+        "api/.venv/lib/python3.13/site-packages"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "ruff.path": [
+        "uv",
+        "run",
+        "ruff"
+    ]
+}

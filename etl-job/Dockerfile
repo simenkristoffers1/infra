@@ -8,7 +8,8 @@ RUN --mount=type=bind,source=uv.lock,target=uv.lock \
     uv sync --frozen --no-install-project
 
 ADD ./src /app/src
+ADD ./main.py /app/main.py
 
 EXPOSE 8000
 
-CMD ["uv", "run", "fastapi", "run", "src/main.py"]
+CMD ["uv", "run", "main.py"]
