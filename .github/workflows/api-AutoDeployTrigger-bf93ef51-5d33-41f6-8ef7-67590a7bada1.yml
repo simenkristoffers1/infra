@@ -37,7 +37,6 @@ jobs:
           appSourcePath: ${{ github.workspace }}/api
           dockerfilePath: Dockerfile
           acrName: acr31oi23218
-          registryUrl: acr31oi23218.azurecr.io
           containerAppName: api
           resourceGroup: rg-test
           imageToBuild: acr31oi23218.azurecr.io/api:${{ github.sha }}
