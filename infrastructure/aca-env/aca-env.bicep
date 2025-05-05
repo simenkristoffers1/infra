@@ -68,3 +68,23 @@ resource aspireDashboard 'Microsoft.App/managedEnvironments/dotNetComponents@202
   }
   parent: aca_env
 }
+
+output MANAGED_IDENTITY_NAME string = aca_env_mi.name
+
+output MANAGED_IDENTITY_PRINCIPAL_ID string = aca_env_mi.properties.principalId
+
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = aca_env_law.name
+
+output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = aca_env_law.id
+
+output AZURE_CONTAINER_REGISTRY_NAME string = aca_env_acr.name
+
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = aca_env_acr.properties.loginServer
+
+output AZURE_CONTAINER_REGISTRY_MANAGED_IDENTITY_ID string = aca_env_mi.id
+
+output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = aca_env.name
+
+output AZURE_CONTAINER_APPS_ENVIRONMENT_ID string = aca_env.id
+
+output AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN string = aca_env.properties.defaultDomain
