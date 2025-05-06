@@ -23,5 +23,6 @@
         "uv",
         "run",
         "ruff"
-    ]
+    ],
+    "dotnet.defaultSolution": "assistant/src/Assistant.sln"
 }

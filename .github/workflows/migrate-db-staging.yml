@@ -1,0 +1,43 @@
+name: Migrate Database - Staging
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./assistant
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: staging
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run Migration Script
+        run: dotnet run --project ./src/DbUpMigrator
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          ASPNETCORE_ENVIRONMENT: Staging
