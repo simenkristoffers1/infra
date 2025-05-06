@@ -16,7 +16,7 @@ credential = DefaultAzureCredential()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from api v4"}
+    return {"message": "Hello from api v5"}
 
 
 @app.get("/secret")
