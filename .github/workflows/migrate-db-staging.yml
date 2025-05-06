@@ -5,6 +5,9 @@ on:
 
 jobs:
   migrate-staging:
+    permissions:
+      id-token: write
+      contents: read
     uses: ./.github/workflows/reusable-migrate-database.yml
     with:
       environment-name: Staging
