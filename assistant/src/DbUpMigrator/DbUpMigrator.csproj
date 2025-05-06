@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
     <PackageReference Include="dbup-core" Version="6.0.4" />
     <PackageReference Include="dbup-postgresql" Version="6.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.4" />
@@ -28,8 +29,7 @@
 
   <Target Name="AfterBuild">
     <Message Text="@(Content)" Importance="high" Condition="%(Content.Extension) == '.sql'" />
-    <Error Condition="%(Content.Extension) == '.sql'"
-          Text="Nothing should be marked as Content, check your scripts are marked as Embedded Resource" />
+    <Error Condition="%(Content.Extension) == '.sql'" Text="Nothing should be marked as Content, check your scripts are marked as Embedded Resource" />
   </Target>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Data.Common;
+using System.Reflection;
+using Azure.Identity;
 using DbUp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,8 +14,36 @@ var configuration = new ConfigurationBuilder()
 using var factory = LoggerFactory.Create(builder => builder.AddConsole());
 var logger = factory.CreateLogger("DbUpMigrator");
 
-var connectionString = configuration.GetConnectionString("postgresdb");
-Console.WriteLine(connectionString);
+var environment = configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+string connectionString;
+if (environment == "Staging" || environment == "Production")
+{
+    var tokenCredential = new DefaultAzureCredential();
+    var accessToken = tokenCredential.GetToken(
+        new Azure.Core.TokenRequestContext(["https://ossrdbms-aad.database.windows.net/.default"])
+    );
+
+    var csBuilder = new DbConnectionStringBuilder
+    {
+        ["Host"] = configuration.GetValue<string>("DB_HOST") ?? throw new Exception("DB_HOST not found"),
+        ["Port"] = configuration.GetValue<string>("DB_PORT") ?? throw new Exception("DB_PORT not found"),
+        ["Username"] = configuration.GetValue<string>("DB_USERNAME") ?? throw new Exception("DB_USERNAME not found"),
+        ["Database"] = configuration.GetValue<string>("DB_DATABASE") ?? throw new Exception("DB_DATABASE not found"),
+        ["Password"] = accessToken.Token,
+        ["SSL Mode"] = "Require",
+        ["Trust Server Certificate"] = "true"
+    };
+
+    connectionString = csBuilder.ConnectionString;
+}
+else
+{
+    connectionString = configuration.GetConnectionString("TargetDatabase")
+        ?? throw new Exception("TargetDatabase connection string not found");
+}
+
+
 var upgrader =
     DeployChanges.To
         .PostgresqlDatabase(connectionString)
