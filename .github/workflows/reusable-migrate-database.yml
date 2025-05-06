@@ -3,10 +3,6 @@ name: Reusable Database Migration
 on:
   workflow_call:
     inputs:
-      environment-name:
-        description: "Target environment (e.g., Staging, Production)"
-        required: true
-        type: string
       dotnet-version:
         description: ".NET version to use"
         required: true
