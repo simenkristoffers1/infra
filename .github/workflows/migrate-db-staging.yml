@@ -10,6 +10,5 @@ jobs:
       contents: read
     uses: ./.github/workflows/reusable-migrate-database.yml
     with:
-      environment-name: Staging
       dotnet-version: "9.0.x"
       working-directory: ./assistant

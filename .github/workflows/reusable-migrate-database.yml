@@ -29,8 +29,6 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
 
-    # environment: ${{ inputs.environment-name }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -56,4 +54,4 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          ASPNETCORE_ENVIRONMENT: ${{ inputs.environment-name }}
+          ASPNETCORE_ENVIRONMENT: "Staging"
