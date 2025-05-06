@@ -18,13 +18,14 @@ on:
         type: string
         default: "./assistant"
 
-defaults:
-  run:
-    working-directory: ${{ inputs.working-directory }}
-
 jobs:
   migrate:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
     # environment: ${{ inputs.environment-name }}
     permissions:
       id-token: write
