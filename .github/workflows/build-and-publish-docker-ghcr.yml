@@ -15,7 +15,7 @@ on:
     outputs:
       image-name-with-digest:
         description: "The full image name with digest"
-        value: ${{ jobs.build.outputs.image-name-with-digest }}
+        value: ${{ jobs.build-and-publish-to-ghcr.outputs.image-name-with-digest }}
 
 jobs:
   build-and-publish-to-ghcr:
