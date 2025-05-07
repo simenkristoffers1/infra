@@ -39,4 +39,4 @@ jobs:
         with:
           containerAppName: ${{ vars.CA_ASSISTANT_API_NAME }}
           resourceGroup: ${{ vars.CA_RESOURCE_GROUP }}
-          imageToDeploy: ghcr.io/${{ needs.build.outputs.image-name-with-digest }}
+          imageToDeploy: ghcr.io/${{ needs.build-docker-image.outputs.image-name-with-digest }}
