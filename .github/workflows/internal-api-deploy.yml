@@ -1,0 +1,20 @@
+name: Deploy to GHCR
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and push Docker image
+        uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
+        with:
+          registry: ghcr.io
+          image-name: simenkristoffers1/internal-api
+          file: ./internal-api/Dockerfile
