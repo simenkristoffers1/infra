@@ -5,6 +5,11 @@ on:
   #     branches: ["main"]
   workflow_dispatch:
 
+env:
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
 jobs:
   build:
     permissions:
@@ -22,9 +27,9 @@ jobs:
     needs: build
     uses: ./.github/workflows/deploy-azure-container-app.yml
     with:
-      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      azure-client-id: ${{ env.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ env.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
       registry: ghcr.io
       image-name: ${{ needs.build.outputs.image-name-with-digest }}
       container-app-name: api
