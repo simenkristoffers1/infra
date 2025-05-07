@@ -1,0 +1,26 @@
+name: Deploy Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_staging:
+    name: Deploy to Staging
+    uses: ./.github/workflows/foo.yml
+    with:
+      environment: staging
+      resource-group: ${{ vars.CA_RESOURCE_GROUP }}
+    secrets:
+      rg: ${{ vars.CA_RESOURCE_GROUP }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+
+  deploy_prod:
+    name: Deploy to Prod
+    needs: deploy_staging
+    uses: ./.github/workflows/foo.yml
+    with:
+      environment: production
+      resource-group: ${{ vars.CA_RESOURCE_GROUP }}
+    secrets:
+      rg: ${{ vars.CA_RESOURCE_GROUP }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}

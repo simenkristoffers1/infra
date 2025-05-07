@@ -1,0 +1,33 @@
+name: Foo
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: "The environment to deploy to"
+      resource-group:
+        required: true
+        type: string
+        description: "The resource group to deploy to"
+    secrets:
+      rg:
+        required: true
+        description: "The resource group to deploy to"
+      azure-client-id:
+        required: true
+        description: "The secret to deploy to"
+jobs:
+  foo:
+    name: Testing environment ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Dump inputs
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Resource group: ${{ inputs.resource-group }}"
+          echo "RG: ${{ secrets.rg }}"
+          echo "Client ID: ${{ secrets.azure-client-id }}"
