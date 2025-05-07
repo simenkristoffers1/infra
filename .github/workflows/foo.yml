@@ -29,5 +29,20 @@ jobs:
         run: |
           echo "Environment: ${{ inputs.environment }}"
           echo "Resource group: ${{ inputs.resource-group }}"
+          if [[ ${{ inputs.resource-group }} == "rg-test-prod" ]]; then
+            echo "This is PROD resource group"
+          else
+            echo "This is not PROD resource group"
+          fi
           echo "RG: ${{ secrets.rg }}"
+          if [[ ${{ secrets.rg }} == "rg-test-prod" ]]; then
+            echo "This is PROD rg"
+          else
+            echo "This is not PROD rg"
+          fi
           echo "Client ID: ${{ secrets.azure-client-id }}"
+          if [[ ${{ secrets.azure-client-id }} == "123" ]]; then
+            echo "This is PROD client ID"
+          else
+            echo "This is not PROD client ID"
+          fi
