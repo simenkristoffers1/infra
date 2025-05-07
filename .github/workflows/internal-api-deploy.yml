@@ -21,6 +21,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Print final image name with SHA
+      - name: Print final image name with digest
         run: |
-          echo "Final image name with SHA: ${{ needs.build.outputs.image-name-with-sha }}"
+          echo "Final image name with digest: ${{ needs.build.outputs.image-name-with-digest }}"

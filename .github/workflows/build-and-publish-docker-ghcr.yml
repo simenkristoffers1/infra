@@ -17,9 +17,9 @@ on:
         required: true
         type: string
     outputs:
-      image-name-with-sha:
-        description: "The full image name with SHA tag"
-        value: ${{ jobs.build.outputs.image-name-with-sha }}
+      image-name-with-digest:
+        description: "The full image name with digest"
+        value: ${{ jobs.build.outputs.image-name-with-digest }}
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       packages: write
       id-token: write
     outputs:
-      image-name-with-sha: ${{ steps.set-output.outputs.image-name-with-sha }}
+      image-name-with-digest: ${{ steps.set-output.outputs.image-name-with-digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -73,12 +73,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Output image name with SHA
+      - name: Output image name with digest
         id: set-output
         run: |
           FULL_IMAGE_NAME="${{ inputs.registry }}/${{ github.repository_owner }}/${{ inputs.image-name }}@${{ steps.build-and-push.outputs.digest }}"
-          echo "Image name with SHA: $FULL_IMAGE_NAME"
-          echo "image-name-with-sha=$FULL_IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "Image name with digest: $FULL_IMAGE_NAME"
+          echo "image-name-with-digest=$FULL_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
