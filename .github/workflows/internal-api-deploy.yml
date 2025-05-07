@@ -17,21 +17,17 @@ jobs:
       context: ./api
       file: Dockerfile
 
-  deploy-to-azure-container-apps:
+  deploy-staging:
     needs: build-docker-image
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: read
       id-token: write
-    strategy:
-      matrix:
-        environment:
-          - staging
-          - production
-    environment: ${{ matrix.environment }}
+    environment: staging
     steps:
       - name: Azure Login
+
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
