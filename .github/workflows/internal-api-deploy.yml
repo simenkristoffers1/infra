@@ -14,5 +14,12 @@ jobs:
     uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
     with:
       registry: ghcr.io
-      image-name: simenkristoffers1/internal-api
+      image-name: internal-api
       file: ./internal-api/Dockerfile
+  print-image-name:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print final image name with SHA
+        run: |
+          echo "Final image name with SHA: ${{ needs.build.outputs.image-name-with-sha }}"
