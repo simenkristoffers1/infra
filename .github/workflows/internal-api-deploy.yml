@@ -15,7 +15,8 @@ jobs:
     with:
       registry: ghcr.io
       image-name: internal-api
-      file: ./internal-api/Dockerfile
+      context: ./internal-api
+      file: Dockerfile
   print-image-name:
     needs: build
     runs-on: ubuntu-latest
