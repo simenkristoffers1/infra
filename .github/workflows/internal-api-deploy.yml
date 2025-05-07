@@ -7,11 +7,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build and push Docker image
-        uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
-        with:
-          registry: ghcr.io
-          image-name: simenkristoffers1/internal-api
-          file: ./internal-api/Dockerfile
+    uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
+    with:
+      registry: ghcr.io
+      image-name: simenkristoffers1/internal-api
+      file: ./internal-api/Dockerfile
