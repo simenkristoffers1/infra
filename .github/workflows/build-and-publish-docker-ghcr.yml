@@ -18,7 +18,7 @@ on:
         value: ${{ jobs.build.outputs.image-name-with-digest }}
 
 jobs:
-  build:
+  build-and-publish-to-ghcr:
     runs-on: ubuntu-latest
     permissions:
       contents: read
