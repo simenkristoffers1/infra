@@ -13,22 +13,23 @@ jobs:
       id-token: write
     uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
     with:
-      image-name: ${{ vars.CA_ASSISTANT_API_IMAGE_NAME }}
+      image-name: ${{ vars.GHCR_ASSISTANT_API_IMAGE_NAME }}
       context: ./api
       file: Dockerfile
 
-  deploy:
+  deploy-staging:
     needs: build
+    runs-on: ubuntu-latest
+    environment: staging
     permissions:
       contents: read
       packages: read
       id-token: write
-    uses: ./.github/workflows/deploy-azure-container-app.yml
-    with:
-      image-name: ${{ needs.build.outputs.image-name-with-digest }}
-      container-app-name: ${{ vars.CA_ASSISTANT_API_NAME }}
-      resource-group: ${{ vars.CA_RESOURCE_GROUP }}
-    secrets:
-      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    steps:
+      - name: Call reusable deploy workflow for Assistant to Staging
+        uses: ./.github/workflows/deploy-azure-container-app.yml
+        with:
+          image-name: ${{ needs.build_assistant.outputs.image-name-with-digest }}
+          container-app-name: ${{ vars.CA_ASSISTANT_API_NAME }}
+          resource-group: ${{ vars.CA_RESOURCE_GROUP }}
+          target_environment: "staging"

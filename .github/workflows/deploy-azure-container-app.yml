@@ -12,17 +12,14 @@ on:
       resource-group:
         required: true
         type: string
-    secrets:
-      azure-client-id:
+      target_environment:
         required: true
-      azure-tenant-id:
-        required: true
-      azure-subscription-id:
-        required: true
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.target_environment }}
     permissions:
       contents: read
       packages: read
