@@ -1,0 +1,49 @@
+name: Deploy Azure Container App
+
+on:
+  workflow_call:
+    inputs:
+      azure-client-id:
+        required: true
+        type: string
+      azure-tenant-id:
+        required: true
+        type: string
+      azure-subscription-id:
+        required: true
+        type: string
+      registry:
+        required: true
+        type: string
+        default: ghcr.io
+      image-name:
+        required: true
+        type: string
+      container-app-name:
+        required: true
+        type: string
+      resource-group:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ inputs.azure-client-id }}
+          tenant-id: ${{ inputs.azure-tenant-id }}
+          subscription-id: ${{ inputs.azure-subscription-id }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          containerAppName: ${{ inputs.container-app-name }}
+          resourceGroup: ${{ inputs.resource-group }}
+          imageToDeploy: ${{ inputs.registry }}/${{ inputs.image-name }}

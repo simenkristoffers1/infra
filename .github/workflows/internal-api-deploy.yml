@@ -14,9 +14,22 @@ jobs:
     uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
     with:
       registry: ghcr.io
-      image-name: internal-api
-      context: ./internal-api
+      image-name: api
+      context: ./api
       file: Dockerfile
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy-azure-container-app.yml
+    with:
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      registry: ghcr.io
+      image-name: ${{ needs.build.outputs.image-name-with-digest }}
+      container-app-name: api
+      resource-group: rg-test
+
   print-image-name:
     needs: build
     runs-on: ubuntu-latest
