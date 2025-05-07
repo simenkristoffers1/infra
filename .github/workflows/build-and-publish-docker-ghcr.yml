@@ -16,6 +16,10 @@ on:
       image-name:
         required: true
         type: string
+    outputs:
+      image-name-with-sha:
+        description: "The full image name with SHA tag"
+        value: ${{ jobs.build.outputs.image-name-with-sha }}
 
 jobs:
   build:
