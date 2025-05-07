@@ -13,8 +13,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/build-and-publish-docker-ghcr.yml
     with:
-      registry: ghcr.io
-      image-name: api
+      image-name: ${{ vars.CA_ASSISTANT_API_IMAGE_NAME }}
       context: ./api
       file: Dockerfile
 
@@ -26,19 +25,10 @@ jobs:
       id-token: write
     uses: ./.github/workflows/deploy-azure-container-app.yml
     with:
-      registry: ghcr.io
       image-name: ${{ needs.build.outputs.image-name-with-digest }}
-      container-app-name: api
-      resource-group: rg-test
+      container-app-name: ${{ vars.CA_ASSISTANT_API_NAME }}
+      resource-group: ${{ vars.CA_RESOURCE_GROUP }}
     secrets:
       azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
       azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-  print-image-name:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print final image name with digest
-        run: |
-          echo "Final image name with digest: ${{ needs.build.outputs.image-name-with-digest }}"

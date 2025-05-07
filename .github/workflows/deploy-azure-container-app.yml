@@ -3,10 +3,6 @@ name: Deploy Azure Container App
 on:
   workflow_call:
     inputs:
-      registry:
-        required: true
-        type: string
-        default: ghcr.io
       image-name:
         required: true
         type: string
@@ -44,4 +40,4 @@ jobs:
         with:
           containerAppName: ${{ inputs.container-app-name }}
           resourceGroup: ${{ inputs.resource-group }}
-          imageToDeploy: ${{ inputs.registry }}/${{ inputs.image-name }}
+          imageToDeploy: ghcr.io/${{ inputs.image-name }}
