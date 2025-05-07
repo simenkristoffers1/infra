@@ -72,9 +72,7 @@ jobs:
       - name: Output image name with SHA
         id: set-output
         run: |
-          # Extract the SHA-based tag (e.g., 20250507-abcdefg or sha-abcdefg)
-          SHA_TAG=$(echo "${{ steps.meta.outputs.tags }}" | grep -E '([0-9]{8}-[a-f0-9]{7,}|sha-[a-f0-9]{7,})' | head -n 1)
-          FULL_IMAGE_NAME="${{ inputs.registry }}/${{ github.repository_owner }}/${{ inputs.image-name }}:${SHA_TAG}"
+          FULL_IMAGE_NAME="${{ inputs.registry }}/${{ github.repository_owner }}/${{ inputs.image-name }}@${{ steps.build-and-push.outputs.digest }}"
           echo "Image name with SHA: $FULL_IMAGE_NAME"
           echo "image-name-with-sha=$FULL_IMAGE_NAME" >> $GITHUB_OUTPUT
 
