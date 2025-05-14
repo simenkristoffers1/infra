@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-api:
-    uses: ./.github/workflows/reusable-docker-build-push.yml
+    uses: ./.github/workflows/docker-build-and-push.yml
     with:
       context: ./assistant
       dockerfile: ./assistant/Dockerfile
