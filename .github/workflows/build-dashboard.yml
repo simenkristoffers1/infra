@@ -1,0 +1,25 @@
+name: Build and Push Dashboard Image
+
+on:
+  push:
+    paths:
+      - "dashboard/**"
+      - ".github/workflows/build-dashboard.yml"
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build-dashboard:
+    uses: ./.github/workflows/docker-build-and-push.yml
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    with:
+      context: ./dashboard
+      dockerfile: ./dashboard/Dockerfile
+      image_name: ${{ github.repository }}/dashboard
