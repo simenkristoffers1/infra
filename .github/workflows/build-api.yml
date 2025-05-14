@@ -1,0 +1,19 @@
+name: Build and Push API Image
+
+on:
+  push:
+    paths:
+      - "assistant/**"
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build-api:
+    uses: ./.github/workflows/reusable-docker-build-push.yml
+    with:
+      context: ./assistant
+      dockerfile: ./assistant/Dockerfile
+      image_name: ${{ github.repository_owner }}/${{ github.repository }}/api
