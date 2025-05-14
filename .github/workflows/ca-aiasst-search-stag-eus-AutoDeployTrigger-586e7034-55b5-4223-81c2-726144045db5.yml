@@ -1,22 +1,12 @@
 name: Trigger auto deployment for ca-aiasst-search-stag-eus
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
-  push:
-    branches: 
-      [ main ]
-    paths:
-    - '**'
-    - '.github/workflows/ca-aiasst-search-stag-eus-AutoDeployTrigger-586e7034-55b5-4223-81c2-726144045db5.yml'
-
-  # Allow manual trigger 
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
 
@@ -44,5 +34,3 @@ jobs:
           imageToBuild: ghcr.io/ca-aiasst-search-stag-eus:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
-
-

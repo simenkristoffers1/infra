@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "assistant/**"
+      - ".github/workflows/build-api.yml"
     branches:
       - main
     tags:
