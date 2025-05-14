@@ -18,7 +18,8 @@ jobs:
       contents: read
       packages: write
       attestations: write
+      id-token: write
     with:
       context: ./assistant
       dockerfile: ./assistant/Dockerfile
-      image_name: ${{ github.repository_owner }}/${{ github.repository }}/api
+      image_name: ${{ github.repository }}/api
