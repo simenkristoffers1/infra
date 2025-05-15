@@ -67,9 +67,9 @@ jobs:
           PGPASSWORD: ${{ env.ACCESS_TOKEN }}
         run: |
           declare -A ROLE_MAP=(
-            ["id-assist-api"]="api_user"
-            ["id-assist-search"]="search_user"
-            ["id-assist-indexation"]="indexation_user"
+            ["id-aiasst-api"]="api_user"
+            ["id-aiasst-search"]="search_user"
+            ["id-aiasst-indexation"]="indexation_user"
           )
 
           for PREFIX in "${!ROLE_MAP[@]}"; do
