@@ -15,6 +15,10 @@ on:
         description: "Name of the Docker image (without registry prefix)"
         required: true
         type: string
+    outputs:
+      image_name_with_digest:
+        description: "The full image name with digest"
+        value: ${{ jobs.build-and-push.outputs.image_name_with_digest }}
 
 env:
   REGISTRY: ghcr.io
@@ -27,6 +31,8 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    outputs:
+      image_name_with_digest: ${{ steps.set-output.outputs.image_name_with_digest }}
 
     steps:
       - name: Checkout repository
@@ -75,3 +81,10 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ inputs.image_name }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+      - name: Output image name with digest
+        id: set-output
+        run: |
+          FULL_IMAGE_NAME="${{ inputs.image_name }}@${{ steps.push.outputs.digest }}"
+          echo "Image name with digest: $FULL_IMAGE_NAME"
+          echo "image_name_with_digest=$FULL_IMAGE_NAME" >> $GITHUB_OUTPUT
