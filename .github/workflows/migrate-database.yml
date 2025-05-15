@@ -42,6 +42,6 @@ jobs:
 
       - name: Run SQL to Create and Grant Role
         run: |
-          psql -h ${{ env.DB_HOST }} -p 5432 -U ${{ env.DB_USER }} --password ${ACCESS_TOKEN} postgres
+          psql -h ${{ secrets.DB_HOST }} -p 5432 -U ${{ secrets.DB_USER }} --password ${ACCESS_TOKEN} postgres
           SELECT * FROM pgaadauth_create_principal('${IDENTITY_NAME}', false, false);
           GRANT api_user TO "${IDENTITY_NAME}";
