@@ -76,7 +76,7 @@ jobs:
             ROLE="${ROLE_MAP[$PREFIX]}"
             echo "Processing identity: $PREFIX (role: $ROLE)"
 
-            IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
+            IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
             
             if [ -z "$IDENTITY_NAME" ]; then
               echo "ERROR: No managed identity found with prefix '$PREFIX'"
