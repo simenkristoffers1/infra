@@ -1,15 +1,19 @@
 {
-  "name": "chat-ui",
+  "name": "@simenkristoffers1/infra-chat-ui",
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/simenkristoffers1/infra.git"
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simenkristoffers1/infra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simenkristoffers1/infra/issues"
+  },
+  "homepage": "https://github.com/simenkristoffers1/infra#readme",
   "main": "dist/my-lit-button.js",
   "module": "dist/my-lit-button.js",
   "exports": {
