@@ -33,12 +33,12 @@ jobs:
           scope: "@simenkristoffers1"
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn
 
       - name: Build package
-        run: npm run build
+        run: yarn build
 
       - name: Publish to GitHub Packages
-        run: npm publish
+        run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
