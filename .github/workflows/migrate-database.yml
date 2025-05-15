@@ -48,7 +48,7 @@ jobs:
           DB_PORT: 5432
           DB_USERNAME: ${{ secrets.DB_USER }}
           DB_DATABASE: ${{ secrets.DB_NAME }}
-          ASPNETCORE_ENVIRONMENT: ${{ env.ASPNETCORE_ENVIRONMENT }}
+          ASPNETCORE_ENVIRONMENT: ${{ vars.ASPNETCORE_ENVIRONMENT }}
 
       - name: Retrieve Access Token
         id: get-access-token
