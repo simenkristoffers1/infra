@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Environment to migrate"
+        description: "Environment to migrate (staging, production)"
         required: true
         type: string
 
