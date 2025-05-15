@@ -45,5 +45,5 @@ jobs:
           PGPASSWORD: ${{ env.ACCESS_TOKEN }}
         run: |
           psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
-          -c "SELECT * FROM pgaadauth_create_principal('${IDENTITY_NAME}', false, false);" \
-          -c "GRANT api_user TO \"${IDENTITY_NAME}\";"
+          -c "SELECT * FROM pgaadauth_create_principal('${{ env.IDENTITY_NAME}}', false, false);" \
+          -c "GRANT api_user TO \"${{ env.IDENTITY_NAME}}\";"
