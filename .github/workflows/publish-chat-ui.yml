@@ -1,0 +1,44 @@
+name: Publish Chat UI to GitHub Packages
+
+on:
+  push:
+    paths:
+      - "chat-ui/**"
+      - ".github/workflows/publish-chat-ui.yml"
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: chat-ui
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23.0"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@simenkristoffers1"
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build package
+        run: yarn build
+
+      - name: Publish to GitHub Packages
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

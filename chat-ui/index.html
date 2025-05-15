@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module" src="/dist/my-lit-button.js"></script>
+  </head>
+  <body>
+    <my-button label="Say Hello"></my-button>
+    <script>
+      document.querySelector('my-button').addEventListener('my-click', () => {
+        alert('Button clicked!');
+      });
+    </script>
+  </body>
+</html>
