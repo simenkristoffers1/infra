@@ -1,5 +1,5 @@
 {
-  "name": "@simenkristoffers1/infra-chat-ui",
+  "name": "@simenkristoffers1/chat-ui",
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/simenkristoffers1/infra/issues"
   },
-  "homepage": "https://github.com/simenkristoffers1/infra#readme",
+  "homepage": "https://github.com/simenkristoffers1/infra/tree/main/chat-ui#readme",
   "main": "dist/my-lit-button.js",
   "module": "dist/my-lit-button.js",
   "exports": {
