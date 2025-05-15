@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Environment to migrate (staging, production)"
+        description: "Environment to migrate"
         required: true
-        type: string
+        type: choice
+        options:
+          - staging
+          - production
 
 defaults:
   run:
@@ -59,20 +62,29 @@ jobs:
           echo "Full list of identities:"
           az identity list -o table
 
-      - name: Find Managed Identity by Name Prefix
-        run: |
-          IDENTITY_NAME=$(az identity list --query "[?starts_with(name, 'id-aiasst-api')].name" -o tsv | head -n 1)
-          if [ -z "$IDENTITY_NAME" ]; then
-          echo "ERROR: No managed identity found with prefix 'id-aiasst-api'"
-          exit 1
-          fi
-          echo "Found identity: $IDENTITY_NAME"
-          echo "IDENTITY_NAME=$IDENTITY_NAME" >> $GITHUB_ENV
-
-      - name: Run SQL to Create and Grant Role
+      - name: Assign Role to Managed Identities
         env:
           PGPASSWORD: ${{ env.ACCESS_TOKEN }}
         run: |
-          psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
-          -c "SELECT * FROM pgaadauth_create_principal('${{ env.IDENTITY_NAME}}', false, false);" \
-          -c "GRANT api_user TO \"${{ env.IDENTITY_NAME}}\";"
+          declare -A ROLE_MAP=(
+            ["id-assist-api"]="api_user"
+            ["id-assist-search"]="search_user"
+            ["id-assist-indexation"]="indexation_user"
+          )
+
+          for PREFIX in "${!ROLE_MAP[@]}"; do
+            ROLE="${ROLE_MAP[$PREFIX]}"
+            echo "Processing identity: $PREFIX (role: $ROLE)"
+
+            IDENTITY_NAME=$(az identity list --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
+            
+            if [ -z "$IDENTITY_NAME" ]; then
+              echo "ERROR: No managed identity found with prefix '$PREFIX'"
+              exit 1
+            fi
+
+            echo "Found identity: $IDENTITY_NAME"
+            psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
+            -c "SELECT * FROM pgaadauth_create_principal('$IDENTITY_NAME', false, false);" \
+            -c "GRANT $ROLE TO \"$IDENTITY_NAME\";"
+          done
