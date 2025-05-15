@@ -12,6 +12,9 @@ jobs:
   migrate-database:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout to the branch
         uses: actions/checkout@v2
