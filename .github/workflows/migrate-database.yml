@@ -47,8 +47,8 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: 5432
           DB_USERNAME: ${{ secrets.DB_USER }}
-          DB_DATABASE: assistantdb
-          ASPNETCORE_ENVIRONMENT: Staging
+          DB_DATABASE: ${{ secrets.DB_NAME }}
+          ASPNETCORE_ENVIRONMENT: ${{ env.ASPNETCORE_ENVIRONMENT }}
 
       - name: Retrieve Access Token
         id: get-access-token
@@ -76,7 +76,7 @@ jobs:
             ROLE="${ROLE_MAP[$PREFIX]}"
             echo "Processing identity: $PREFIX (role: $ROLE)"
 
-            IDENTITY_NAME=$(az identity list --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
+            IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
             
             if [ -z "$IDENTITY_NAME" ]; then
               echo "ERROR: No managed identity found with prefix '$PREFIX'"
