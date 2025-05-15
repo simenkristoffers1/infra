@@ -85,6 +85,33 @@ jobs:
 
             echo "Found identity: $IDENTITY_NAME"
             psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
-            -c "SELECT * FROM pgaadauth_create_principal('$IDENTITY_NAME', false, false);" \
-            -c "GRANT $ROLE TO \"$IDENTITY_NAME\";"
+            DO \$\$
+            BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_user WHERE usename = '$IDENTITY_NAME') THEN
+                RAISE NOTICE 'Creating principal $IDENTITY_NAME';
+                PERFORM * FROM pgaadauth_create_principal('$IDENTITY_NAME', false, false);
+            ELSE
+                RAISE NOTICE 'Principal $IDENTITY_NAME already exists';
+            END IF;
+            END
+            \$\$;
+
+            -- Check if role is already granted
+            DO \$\$
+            BEGIN
+            IF NOT EXISTS (
+                SELECT 1
+                FROM pg_roles r
+                JOIN pg_auth_members m ON r.oid = m.roleid
+                JOIN pg_roles u ON u.oid = m.member
+                WHERE r.rolname = '$ROLE' AND u.rolname = '$IDENTITY_NAME'
+            ) THEN
+                RAISE NOTICE 'Granting $ROLE to $IDENTITY_NAME';
+                EXECUTE 'GRANT $ROLE TO "$IDENTITY_NAME"';
+            ELSE
+                RAISE NOTICE 'Role $ROLE already granted to $IDENTITY_NAME';
+            END IF;
+            END
+            \$\$;
+            EOF
           done
