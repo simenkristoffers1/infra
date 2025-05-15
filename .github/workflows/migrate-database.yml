@@ -1,0 +1,24 @@
+name: Build and Deploy API
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to migrate"
+        required: true
+        type: string
+
+jobs:
+  migrate-database:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.DBMIGRATE_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.DBMIGRATE_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.DBMIGRATE_AZURE_SUBSCRIPTION_ID }}
