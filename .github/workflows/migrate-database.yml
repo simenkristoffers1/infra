@@ -25,3 +25,23 @@ jobs:
           client-id: ${{ secrets.DBMIGRATE_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.DBMIGRATE_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.DBMIGRATE_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Retrieve Access Token
+        id: get-access-token
+        run: |
+          ACCESS_TOKEN=$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net --query accessToken --output tsv)
+          echo "Found access token: $ACCESS_TOKEN"
+          echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
+
+      - name: Find Managed Identity by Name Prefix
+        id: find_identity
+        run: |
+          IDENTITY_NAME=$(az identity list --query "[?starts_with(name, 'id-aiasst-api')].name | [0]" -o tsv)
+          echo "Found identity: $IDENTITY_NAME"
+          echo "IDENTITY_NAME=$IDENTITY_NAME" >> $GITHUB_ENV
+
+      - name: Run SQL to Create and Grant Role
+        run: |
+          psql -h ${{ env.DB_HOST }} -p 5432 -U ${{ env.DB_USER }} --password ${ACCESS_TOKEN} postgres
+          SELECT * FROM pgaadauth_create_principal('${IDENTITY_NAME}', false, false);
+          GRANT api_user TO "${IDENTITY_NAME}";
