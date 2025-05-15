@@ -39,13 +39,13 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.DEPLOY_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.DEPLOY_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.DEPLOY_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_IDENTITY_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_IDENTITY_DEPLOY_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_IDENTITY_DEPLOY_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v2
         with:
-          containerAppName: ca-aiasst-api-stag-eus
-          resourceGroup: rg-aiasst-stag-eus
+          containerAppName: ${{ vars.AZURE_CA_API_NAME }}
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ghcr.io/${{ needs.build-api-image.outputs.image_name_with_digest }}

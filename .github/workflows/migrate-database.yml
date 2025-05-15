@@ -29,9 +29,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.DBMIGRATE_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.DBMIGRATE_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.DBMIGRATE_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_IDENTITY_DBMIGRATE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_IDENTITY_DBMIGRATE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_IDENTITY_DBMIGRATE_SUBSCRIPTION_ID }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -76,7 +76,7 @@ jobs:
           ROLE="${ROLE_MAP[$PREFIX]}"
           echo "Processing identity: $PREFIX (role: $ROLE)"
 
-          IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
+          IDENTITY_NAME=$(az identity list --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
 
           if [ -z "$IDENTITY_NAME" ]; then
               echo "ERROR: No managed identity found with prefix '$PREFIX'"
