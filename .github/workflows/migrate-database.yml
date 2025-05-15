@@ -41,7 +41,9 @@ jobs:
           echo "IDENTITY_NAME=$IDENTITY_NAME" >> $GITHUB_ENV
 
       - name: Run SQL to Create and Grant Role
+        env:
+          PGPASSWORD: ${{ env.ACCESS_TOKEN }}
         run: |
-          psql -h ${{ secrets.DB_HOST }} -p 5432 -U ${{ secrets.DB_USER }} --password ${ACCESS_TOKEN} postgres
-          SELECT * FROM pgaadauth_create_principal('${IDENTITY_NAME}', false, false);
-          GRANT api_user TO "${IDENTITY_NAME}";
+          psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
+          -c "SELECT * FROM pgaadauth_create_principal('${IDENTITY_NAME}', false, false);" \
+          -c "GRANT api_user TO \"${IDENTITY_NAME}\";"
