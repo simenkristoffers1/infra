@@ -1,10 +1,10 @@
-name: Build and Push Knowledge Image
+name: Build and Deploy Knowledge
 
 on:
   push:
     paths:
       - "knowledge-search/**"
-      - ".github/workflows/build-knowledge.yml"
+      - ".github/workflows/deploy-knowledge.yml"
     branches:
       - main
     tags:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-knowledge:
+  build-knowledge-image:
     uses: ./.github/workflows/docker-build-and-push.yml
     permissions:
       contents: read
