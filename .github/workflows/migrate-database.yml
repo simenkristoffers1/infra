@@ -67,51 +67,53 @@ jobs:
           PGPASSWORD: ${{ env.ACCESS_TOKEN }}
         run: |
           declare -A ROLE_MAP=(
-            ["id-aiasst-api"]="api_user"
-            ["id-aiasst-search"]="search_user"
-            ["id-aiasst-indexation"]="indexation_user"
+          ["id-aiasst-api"]="api_user"
+          ["id-aiasst-search"]="search_user"
+          ["id-aiasst-indexation"]="indexation_user"
           )
 
           for PREFIX in "${!ROLE_MAP[@]}"; do
-            ROLE="${ROLE_MAP[$PREFIX]}"
-            echo "Processing identity: $PREFIX (role: $ROLE)"
+          ROLE="${ROLE_MAP[$PREFIX]}"
+          echo "Processing identity: $PREFIX (role: $ROLE)"
 
-            IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
-            
-            if [ -z "$IDENTITY_NAME" ]; then
+          IDENTITY_NAME=$(az identity list --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "[?starts_with(name, '$PREFIX')].name" -o tsv | head -n 1)
+
+          if [ -z "$IDENTITY_NAME" ]; then
               echo "ERROR: No managed identity found with prefix '$PREFIX'"
               exit 1
-            fi
+          fi
 
-            echo "Found identity: $IDENTITY_NAME"
-            psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" \
-            DO \$\$
-            BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_user WHERE usename = '$IDENTITY_NAME') THEN
-                RAISE NOTICE 'Creating principal $IDENTITY_NAME';
-                PERFORM * FROM pgaadauth_create_principal('$IDENTITY_NAME', false, false);
-            ELSE
-                RAISE NOTICE 'Principal $IDENTITY_NAME already exists';
-            END IF;
-            END
-            \$\$;
+          echo "Found identity: $IDENTITY_NAME"
 
-            -- Check if role is already granted
-            DO \$\$
-            BEGIN
-            IF NOT EXISTS (
-                SELECT 1
-                FROM pg_roles r
-                JOIN pg_auth_members m ON r.oid = m.roleid
-                JOIN pg_roles u ON u.oid = m.member
-                WHERE r.rolname = '$ROLE' AND u.rolname = '$IDENTITY_NAME'
-            ) THEN
-                RAISE NOTICE 'Granting $ROLE to $IDENTITY_NAME';
-                EXECUTE 'GRANT $ROLE TO "$IDENTITY_NAME"';
-            ELSE
-                RAISE NOTICE 'Role $ROLE already granted to $IDENTITY_NAME';
-            END IF;
-            END
-            \$\$;
-            EOF
+          psql "host=${{ secrets.DB_HOST }} port=5432 dbname=postgres user=${{ secrets.DB_USER }} sslmode=require" <<EOF
+          DO \$\$
+          BEGIN
+          IF NOT EXISTS (SELECT 1 FROM pg_user WHERE usename = '$IDENTITY_NAME') THEN
+              RAISE NOTICE 'Creating principal $IDENTITY_NAME';
+              PERFORM * FROM pgaadauth_create_principal('$IDENTITY_NAME', false, false);
+          ELSE
+              RAISE NOTICE 'Principal $IDENTITY_NAME already exists';
+          END IF;
+          END
+          \$\$;
+
+          -- Check if role is already granted
+          DO \$\$
+          BEGIN
+          IF NOT EXISTS (
+              SELECT 1
+              FROM pg_roles r
+              JOIN pg_auth_members m ON r.oid = m.roleid
+              JOIN pg_roles u ON u.oid = m.member
+              WHERE r.rolname = '$ROLE' AND u.rolname = '$IDENTITY_NAME'
+          ) THEN
+              RAISE NOTICE 'Granting $ROLE to $IDENTITY_NAME';
+              EXECUTE 'GRANT $ROLE TO "$IDENTITY_NAME"';
+          ELSE
+              RAISE NOTICE 'Role $ROLE already granted to $IDENTITY_NAME';
+          END IF;
+          END
+          \$\$;
+          EOF
+
           done
