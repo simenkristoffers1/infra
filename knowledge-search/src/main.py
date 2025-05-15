@@ -5,4 +5,4 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from internal-api"}
+    return {"message": "Hello from knowledge-search"}
