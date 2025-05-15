@@ -33,10 +33,18 @@ jobs:
           echo "Found access token: $ACCESS_TOKEN"
           echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
 
-      - name: Find Managed Identity by Name Prefix
-        id: find_identity
+      - name: Debug Identity List
         run: |
-          IDENTITY_NAME=$(az identity list --query "[?starts_with(name, 'id-aiasst-api')].name | [0]" -o tsv)
+          echo "Full list of identities:"
+          az identity list -o table
+
+      - name: Find Managed Identity by Name Prefix
+        run: |
+          IDENTITY_NAME=$(az identity list --query "[?starts_with(name, 'id-aiasst-api')].name" -o tsv | head -n 1)
+          if [ -z "$IDENTITY_NAME" ]; then
+          echo "ERROR: No managed identity found with prefix 'id-aiasst-api'"
+          exit 1
+          fi
           echo "Found identity: $IDENTITY_NAME"
           echo "IDENTITY_NAME=$IDENTITY_NAME" >> $GITHUB_ENV
 
