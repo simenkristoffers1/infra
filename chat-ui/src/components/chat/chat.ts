@@ -160,3 +160,9 @@ export class ChatContainer extends BaseComponent implements ChatControllerHost {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'gaia-chat': ChatContainer;
+  }
+}
