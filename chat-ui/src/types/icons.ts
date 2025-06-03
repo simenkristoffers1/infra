@@ -1,0 +1,15 @@
+export type Icon =
+  | 'arrow-up'
+  | 'arrow-up-right'
+  | 'copy'
+  | 'ellipsis'
+  | 'info'
+  | 'pin'
+  | 'refresh-cw'
+  | 'shield'
+  | 'square-arrow-out-up-right'
+  | 'square-pen'
+  | 'text'
+  | 'thumbs-down'
+  | 'thumbs-up'
+  | 'trash-2';
