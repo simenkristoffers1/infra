@@ -1,6 +1,6 @@
 {
   "name": "@simenkristoffers1/chat-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Web component library for the Gaia Assistant Chat UI",
   "type": "module",
   "main": "dist/gaia-chat-ui.umd.js",

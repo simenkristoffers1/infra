@@ -1,10 +1,13 @@
 import { css } from 'lit';
 
 export const chatStyles = css`
-  .chat-container {
-    max-width: 400px;
-    min-width: 400px;
+  :host {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    border-left: var(--border-width-sm) solid var(--border-primary);
+    width: 100%;
+  }
+  .chat-container {
+    flex: 1 1 0;
   }
 `;

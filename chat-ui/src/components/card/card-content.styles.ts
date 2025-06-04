@@ -4,7 +4,7 @@ export const cardContentStyles = css`
   :host {
     overflow: hidden;
     display: flex;
-    flex: 1 1 0;
+    flex: 1 0 0;
     padding: var(--size-8) var(--size-4);
     background-color: var(--surface-primary);
   }

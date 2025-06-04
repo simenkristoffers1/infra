@@ -10,5 +10,6 @@ export { ChatContainer } from './chat/chat';
 export { Loader } from './loader/loader';
 export { Menu } from './menu/menu';
 export { MenuItem } from './menu/menu-item';
+export { Popover } from './popover/popover';
 export { Spacing } from './spacing/spacing';
 export { Tooltip } from './tooltip/tooltip';

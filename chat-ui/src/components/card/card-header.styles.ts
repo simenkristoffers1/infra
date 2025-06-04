@@ -3,6 +3,7 @@ import { css } from 'lit';
 export const cardHeaderStyles = css`
   :host {
     box-sizing: border-box;
+    background-color: var(--surface-primary);
   }
 
   .card-header {
