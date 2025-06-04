@@ -12,6 +12,7 @@ export class Popover extends BaseComponent {
   @property({
     type: Boolean,
     attribute: 'open',
+    state: true,
     reflect: true,
   })
   open = true;
